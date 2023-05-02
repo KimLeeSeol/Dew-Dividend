@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminCotroller {
 
     private final CompanyService companyService;
+
+    /**
+     * 회사 및 배당금 정보 추가!
+     */
     @PostMapping("/company")
     public ResponseEntity<?> addCompany(@RequestBody Company request) {
         String ticker = request.getTicker().trim(); // 사용자가 입력한 ticker
@@ -23,7 +27,7 @@ public class AdminCotroller {
             throw new RuntimeException("ticker is empty");
         }
         Company company = this.companyService.save(ticker);
-
+        this.companyService.addAutoCompleteKeyword(company.getName()); // 회사가 저장될때마다 trie에 회사명이 저장됨
         return ResponseEntity.ok(company);
     }
 
