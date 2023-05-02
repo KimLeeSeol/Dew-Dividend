@@ -12,9 +12,9 @@ public class ScrapedResult {
 
     private Company company; // 회사 정보 저장
 
-    private List<Dividend> dividendEntities; // 배당금 리스트
+    private List<Dividend> dividends; // 배당금 리스트
 
     public ScrapedResult() {
-        this.dividendEntities = new ArrayList<>(); // 리스트에 넣어줌
+        this.dividends = new ArrayList<>(); // 리스트에 넣어줌
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
-import java.util.List;
 
 @RestController
 @RequestMapping("/company") // 공통 경로는 빼주기
@@ -23,8 +22,6 @@ public class CompanyController {
 
         return ResponseEntity.ok(result);
     }
-
-
 
     @GetMapping
     public ResponseEntity<?> searchCompany(final Pageable pageable) {

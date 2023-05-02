@@ -66,7 +66,7 @@ public class YahooFinanceScraper implements Scraper {
 
 
             }
-            scrapResult.setDividendEntities(dividends);
+            scrapResult.setDividends(dividends);
 
         } catch (IOException e) {
             // 스크래핑이 정상적으로 완료되지 못함

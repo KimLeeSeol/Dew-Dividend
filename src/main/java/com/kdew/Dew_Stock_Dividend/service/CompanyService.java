@@ -54,12 +54,13 @@ public class CompanyService {
         // 스크래핑 결과 반환
         // 배당금은 companyId랑 같이 저장이 되어야함. 그래서 회사 정보를 먼저 저장하고 결과를 받은 entity에서 id를 가져와서 d
         CompanyEntity companyEntity = this.companyRepository.save(new CompanyEntity(company));
-        List<DividendEntity> dividendEntities = scrapedResult.getDividendEntities().stream()
+        List<DividendEntity> dividendEntities = scrapedResult.getDividends().stream()
                 .map(e -> new DividendEntity(companyEntity.getId(), e))
                 .collect(Collectors.toList());
         this.dividendRepository.saveAll(dividendEntities);
         return company;
     }
+
 
     // 데이터 저장
     public void addAutoCompleteKeyword(String keyword) {
