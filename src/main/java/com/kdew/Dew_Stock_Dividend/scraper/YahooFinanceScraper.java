@@ -59,10 +59,7 @@ public class YahooFinanceScraper implements Scraper {
                     throw new RuntimeException("Unexpected Month enum value -> " + splits[0]);
                 }
 
-                dividends.add(Dividend.builder()
-                        .date(LocalDateTime.of(year,month,day,0,0))
-                        .dividend(dividend)
-                        .build());
+                dividends.add(new Dividend(LocalDateTime.of(year,month,day,0,0), dividend));
 
 
             }
@@ -85,10 +82,7 @@ public class YahooFinanceScraper implements Scraper {
             Element titleEle = document.getElementsByTag("h1").get(0); // document에서 회사명 가져오기, 타이틀
             String title = titleEle.text().split(" - ")[1].trim(); // 회사명 깔끔하게 가져오기 위해 처리, 회사명이 "-"로 구분되어있는게 있기때문!
 
-            return Company.builder()
-                    .ticker(ticker)
-                    .name(title)
-                    .build();
+            return new Company(ticker,title);
         }
         catch (IOException e) {
             e.printStackTrace();

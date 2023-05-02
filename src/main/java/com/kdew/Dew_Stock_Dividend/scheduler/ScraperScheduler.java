@@ -4,11 +4,14 @@ import com.kdew.Dew_Stock_Dividend.entity.CompanyEntity;
 import com.kdew.Dew_Stock_Dividend.entity.DividendEntity;
 import com.kdew.Dew_Stock_Dividend.model.Company;
 import com.kdew.Dew_Stock_Dividend.model.ScrapedResult;
+import com.kdew.Dew_Stock_Dividend.model.constants.CacheKey;
 import com.kdew.Dew_Stock_Dividend.repository.CompanyRepository;
 import com.kdew.Dew_Stock_Dividend.repository.DividendRepository;
 import com.kdew.Dew_Stock_Dividend.scraper.Scraper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +20,7 @@ import java.util.List;
 @Slf4j
 @Component
 @AllArgsConstructor
+@EnableCaching
 public class ScraperScheduler {
 
     private final CompanyRepository companyRepository; // 회사 목록을 조회해야 하기 때문
@@ -26,6 +30,7 @@ public class ScraperScheduler {
     private final DividendRepository dividendRepository; // 배당금 정보를 저장해야하기때문
 
     // 매일 정각에 실행
+    @CacheEvict(value = CacheKey.KEY_FINANCE, allEntries = true) // finance 모두 다 비움
     @Scheduled(cron = "${scheduler.scrap.yahoo}")
     public void yahooFinanceScheduling() {
         log.info("scraping scheduler is started");
@@ -37,10 +42,7 @@ public class ScraperScheduler {
         for (var company : companies) {
             log.info("scraping scheduler is started -> " + company.getName());// 스케줄러가 정상적으로 돌아가고있는지 알기위해
 
-            ScrapedResult scrapedResult = this.yahooFinanceScraper.scrap(Company.builder()
-                                    .name(company.getName())
-                                    .ticker(company.getTicker())
-                                    .build());
+            ScrapedResult scrapedResult = this.yahooFinanceScraper.scrap(new Company(company.getTicker(), company.getName()));
 
             // DB에 없는 배당금 스크래핑 정보를 저장
             scrapedResult.getDividends().stream()
