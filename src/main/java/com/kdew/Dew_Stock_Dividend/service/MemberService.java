@@ -1,5 +1,6 @@
 package com.kdew.Dew_Stock_Dividend.service;
 
+import com.kdew.Dew_Stock_Dividend.exception.impl.AlreadyExistUserException;
 import com.kdew.Dew_Stock_Dividend.model.Auth;
 import com.kdew.Dew_Stock_Dividend.model.MemberEntity;
 import com.kdew.Dew_Stock_Dividend.repository.MemberRepository;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.rmi.AlreadyBoundException;
 
 @Slf4j
 @Service
@@ -30,7 +33,7 @@ public class MemberService implements UserDetailsService {
 
         boolean exists = this.memberRepository.existsByUsername(member.getUsername()); // 해당 아이디와 동일한 아이디가 있는지 확인
         if (exists) {
-            throw new RuntimeException("이미 사용중인 아이디입니다.");
+            throw new AlreadyExistUserException();
         }
 
         member.setPassword(this.passwordEncoder.encode(member.getPassword())); // 안전하게 인코딩된 패스워드 값을 set함

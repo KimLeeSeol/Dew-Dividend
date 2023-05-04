@@ -2,6 +2,7 @@ package com.kdew.Dew_Stock_Dividend.service;
 
 import com.kdew.Dew_Stock_Dividend.entity.CompanyEntity;
 import com.kdew.Dew_Stock_Dividend.entity.DividendEntity;
+import com.kdew.Dew_Stock_Dividend.exception.impl.NoCompanyException;
 import com.kdew.Dew_Stock_Dividend.model.Company;
 import com.kdew.Dew_Stock_Dividend.model.ScrapedResult;
 import com.kdew.Dew_Stock_Dividend.repository.CompanyRepository;
@@ -81,7 +82,7 @@ public class CompanyService {
 
     public String deleteCompany(String ticker) {
         var company = this.companyRepository.findByTicker(ticker)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 회사입니다."));
+                .orElseThrow(() -> new NoCompanyException());
 
         this.dividendRepository.deleteAllByCompanyId(company.getId());
         this.companyRepository.delete(company);

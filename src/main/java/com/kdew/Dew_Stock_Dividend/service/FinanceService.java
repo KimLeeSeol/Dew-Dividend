@@ -2,6 +2,7 @@ package com.kdew.Dew_Stock_Dividend.service;
 
 import com.kdew.Dew_Stock_Dividend.entity.CompanyEntity;
 import com.kdew.Dew_Stock_Dividend.entity.DividendEntity;
+import com.kdew.Dew_Stock_Dividend.exception.impl.NoCompanyException;
 import com.kdew.Dew_Stock_Dividend.model.Company;
 import com.kdew.Dew_Stock_Dividend.model.Dividend;
 import com.kdew.Dew_Stock_Dividend.model.ScrapedResult;
@@ -35,7 +36,7 @@ public class FinanceService {
 
         // 회사명 기준으로 회사명 조회
         CompanyEntity companyEntity = this.companyRepository.findByName(companyName)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 회사명입니다."));
+                .orElseThrow(() -> new NoCompanyException());
 
         // 조회된 회사 ID로 배당금 조회
         List<DividendEntity> dividendEntities = this.dividendRepository.findAllByCompanyId(companyEntity.getId());
