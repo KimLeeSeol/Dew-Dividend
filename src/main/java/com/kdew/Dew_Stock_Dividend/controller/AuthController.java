@@ -36,7 +36,7 @@ public class AuthController {
         var member = this.memberService.authenticate(request);
         // 아이디와 비밀번호가 일치하면 token 생성해서 반환
         var token = this.tokenProvider.generateToken(member.getUsername(),member.getRolse());
-
+        log.info("user login -> " + request.getUsername());
         return ResponseEntity.ok(token);
     }
 }
